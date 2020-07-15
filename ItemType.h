@@ -4,7 +4,7 @@ public:
 
     ItemType();
     ~ItemType();
-    
+        
     void SetID(int _id);
     void SetName(std::string _name);
     void SetIDFromUser();

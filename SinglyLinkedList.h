@@ -4,7 +4,8 @@ template <typename T>
 class Node {
 public:
     Node() {
-        this->next = nullptr;
+		
+		this->next = nullptr;
         return;
     }
     Node(T _item) {
@@ -41,17 +42,16 @@ private:
 
 template <typename T>
 SinglyLinkedList<T>::SinglyLinkedList() {
-    this->Data = nullptr;
-    this->Data->next = nullptr;
-    this->length = 0;
-    this->currentPointer = 0;
+	
+	this->Data = new Node<T>;
+	
+	this->length = 0;
     return;
 }
 
 template <typename T>
 SinglyLinkedList<T>::~SinglyLinkedList() {
     Data = nullptr;
-    Data->next = nullptr;
     delete[] Data;
 }
 
@@ -69,12 +69,13 @@ int SinglyLinkedList<T>::Add(T _item) {
     else {
     return InsertNode(this->Data, _item);
     }
-
 }
 
 template <typename T>
 int SinglyLinkedList<T>::Delete(T _item) {
-    return 1;
+	bool isFound = false;
+	DeleteNode(this->Data, _item, isFound);
+	return isFound;
 }
 
 template <typename T>
@@ -86,7 +87,13 @@ int SinglyLinkedList<T>::GetItem(T& _item) {
 
 template <typename T>
 int SinglyLinkedList<T>::PrintAllItem() {
-    return PrintNode(this->Data, this->length, this->currentPointer);
+	if (this->length == 0) {
+		std::cout << "\n\t No Item. \n";
+		return 0;
+	}
+	else {
+		return PrintNode(this->Data);
+	}
 }
 
                                             // ** Global Function ** //
@@ -94,8 +101,7 @@ int SinglyLinkedList<T>::PrintAllItem() {
 template <typename T>
 int InsertNode(Node<T>* _data, T _item) {
     if(_data->next == nullptr) {
-        Node<T>* temp;
-        temp->next = nullptr;
+		Node<T>* temp = new Node<T>;
         temp->item = _item;
         _data->next = temp;
         return 1;
@@ -107,8 +113,12 @@ int InsertNode(Node<T>* _data, T _item) {
 }
 
 template <typename T>
-int GetNode(Node<T>* _data, T& _item, bool _found) {
+int GetNode(Node<T>* _data, T& _item, bool& _found) {
     if(!_found && _data->next == nullptr) {
+		if (_data->item == _item) {
+			_item = _data->item;
+			_found = true;
+		}
         return 0;
     }
     else {
@@ -119,19 +129,49 @@ int GetNode(Node<T>* _data, T& _item, bool _found) {
         }
         else {
             GetNode(_data->next, _item, _found);
+            return 1;
         }
     }
 }
 
 template <typename T>
-int PrintNode(Node<T>* _data, int _length, int _curptr) {
-    if(_length + 1 == _curptr) {
+int PrintNode(Node<T>* _data) {
+    if(_data->next == nullptr) {
+		std::cout << _data->item;
         return 1;
     }
     else {
         std::cout << _data->item;
-        int curptr = _curptr + 1;
-        PrintNode(_data, _length, curptr);
+        PrintNode(_data->next);
+        return 1;
     }
-    return 1;
+}
+
+template <typename T>
+int DeleteNode(Node<T>* _data, T _item, bool& _isFound) {
+	if (!_isFound && _data->next == nullptr) {
+		if (_data->item == _item) {
+			Node<T>* temp = new Node<T>;
+			temp->item = _item;
+			temp->next = nullptr;
+			_isFound = true;
+			return 1;
+		}
+		else { return 0; }
+	}
+	else {
+		if (_data->item == _item) {
+			Node<T>* temp = new Node<T>;
+			temp->item = _item;
+			temp->next = _data->next;
+			_data = nullptr;
+			delete[] _data;
+			_isFound = true;
+			return 1;
+		}
+		else {
+			DeleteNode(_data->next, _item, _isFound);
+			return 1;
+		}
+	}
 }
