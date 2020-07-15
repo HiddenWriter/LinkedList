@@ -22,6 +22,9 @@ int Application::Run() {
 			Search();
 			break;
 		case 4:
+			Modify();
+			break;
+		case 5:
 			Display();
 			break;
 		case 0:
@@ -41,7 +44,8 @@ int Application::GetCommand() {
     std::cout << "\t * 1 : Add data.                                   *\n";
     std::cout << "\t * 2 : Delete data.                                *\n";
     std::cout << "\t * 3 : Search data.                                *\n";
-    std::cout << "\t * 4 : Display all data.                           *\n";
+    std::cout << "\t * 4 : Modify Data.                           *\n";
+	std::cout << "\t * 5 : Display all data.                           *\n";
     std::cout << "\t * 0 : Exit.                                       *\n";
 	std::cout << "\t * * * * * * * * * * * * * * * * * * * * * * * * * *\n";
 	std::cout << "\t: ";
@@ -61,6 +65,9 @@ int Application::GetCommand() {
     case 4:
         this->command = 4;
         break;
+	case 5:
+		this->command = 5;
+		break;
     case 0:
         this->command = 0;
         break;
@@ -113,4 +120,21 @@ int Application::Search() {
 int Application::Display() {
     ItemList.PrintAllItem();
     return 1;
+}
+
+int Application::Modify() {
+	ItemType tempT;
+	std::cout << "\n\t Enter ID which you want to modify. \n ";
+	tempT.SetIDFromUser();
+	if (!this->ItemList.GetItem(tempT)) {
+		std::cout << "\n\t Couldn't find such item. \n";
+		return 0;
+	}
+	else {
+		std::cout << "\n\t Enter New Information. \n";
+		tempT.SetNameFromUser();
+		ItemList.Modify(tempT);
+		std::cout << "\n\t Successfully Done. \n";
+		return 1;
+	}
 }

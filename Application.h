@@ -17,6 +17,7 @@ public:
 
     int Display();
 
+	int Modify();
 private:
 
     int command;

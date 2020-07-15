@@ -33,6 +33,8 @@ public:
 
     int PrintAllItem();
 
+	int Modify(T _item);
+
 private:
 
     Node<T>* Data;
@@ -126,7 +128,21 @@ int SinglyLinkedList<T>::PrintAllItem() {
 	}
 }
 
+template <typename T>
+int SinglyLinkedList<T>::Modify(T _item) {
+	if (this->Data->item == _item) {
+		this->Data->item = _item;
+		return true;
+	}
+	else {
+		bool isModified = false;
+		ModifyNode(this->Data, _item, isModified);
+		return isModified;
+	}
+}
                                          
+// ** Global Functions ** //
+
 template <typename T>
 int DeleteNode(Node<T>* _cur, Node<T>* _pre, T _item, bool& _isDeleted) {
 	if (_cur->next == nullptr && !_isDeleted) {
@@ -181,3 +197,27 @@ int GetNode(Node<T>* _data, T& _item, bool& _found) {
     }
 }
 
+template <typename T>
+int ModifyNode(Node<T>* _data, T _item, bool& _isModified) {
+	if (_data->next == nullptr && !_isModified) {
+		if (_data->item == _item) {
+			_data->item = _item;
+			_isModified = true;
+			return _isModified;
+		}
+		else {
+			return _isModified;
+		}
+	}
+	else {
+		if (_data->item == _item) {
+			_data->item = _item;
+			_isModified = true;
+			return _isModified;
+		}
+		else {
+			ModifyNode(_data->next, _item, _isModified);
+			return _isModified;
+		}
+	}
+}
