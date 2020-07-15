@@ -27,6 +27,7 @@ int Application::Run() {
 		case 5:
 			Display();
 			break;
+	
 		case 0:
 			isTerminated = true;
 			break;
@@ -44,7 +45,7 @@ int Application::GetCommand() {
     std::cout << "\t * 1 : Add data.                                   *\n";
     std::cout << "\t * 2 : Delete data.                                *\n";
     std::cout << "\t * 3 : Search data.                                *\n";
-    std::cout << "\t * 4 : Modify Data.                           *\n";
+    std::cout << "\t * 4 : Modify Data.                                *\n";
 	std::cout << "\t * 5 : Display all data.                           *\n";
     std::cout << "\t * 0 : Exit.                                       *\n";
 	std::cout << "\t * * * * * * * * * * * * * * * * * * * * * * * * * *\n";
@@ -67,6 +68,12 @@ int Application::GetCommand() {
         break;
 	case 5:
 		this->command = 5;
+		break;
+	case 6:
+		this->command = 6;
+		break;
+	case 7:
+		this->command = 7;
 		break;
     case 0:
         this->command = 0;

@@ -35,6 +35,7 @@ public:
 
 	int Modify(T _item);
 
+
 private:
 
     Node<T>* Data;
@@ -46,7 +47,7 @@ template <typename T>
 SinglyLinkedList<T>::SinglyLinkedList() {
 	
 	this->Data = new Node<T>;
-	
+	this->Data = nullptr;
 	this->length = 0;
     return;
 }
@@ -60,7 +61,7 @@ SinglyLinkedList<T>::~SinglyLinkedList() {
 template <typename T>
 int SinglyLinkedList<T>::Add(T _item) {
     bool isFound = false;
-    if(this->length == 0) {
+    if(this->Data == nullptr) {
         Node<T>* temp = new Node<T>;
         temp->item = _item;
         temp->next = nullptr;
@@ -72,11 +73,9 @@ int SinglyLinkedList<T>::Add(T _item) {
         return 0;
     }
     else {
-        Node<T>* temp = new Node<T>;
-        temp->item = _item;
-        temp->next = this->Data;
-        this->Data = temp;
-        this->length++;
+		bool isAdded = false;
+		InsertNode(this->Data, this->Data->next, _item, isAdded);
+		this->length++;
         return 1;
     }
 }
@@ -92,6 +91,10 @@ int SinglyLinkedList<T>::Delete(T _item) {
 
 		this->Data = new Node<T>;
 		this->Data = newData;
+
+		newData = nullptr;
+		delete[] newData;
+
         this->length--;
         isDeleted = true;        
     }
@@ -105,6 +108,9 @@ int SinglyLinkedList<T>::Delete(T _item) {
 
 template <typename T>
 int SinglyLinkedList<T>::GetItem(T& _item) {
+	if (this->Data == nullptr) {
+		return 0;
+	}
     bool isFound = false;
     GetNode(this->Data, _item, isFound);
     return isFound;
@@ -140,8 +146,12 @@ int SinglyLinkedList<T>::Modify(T _item) {
 		return isModified;
 	}
 }
-                                         
-// ** Global Functions ** //
+
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
 
 template <typename T>
 int DeleteNode(Node<T>* _cur, Node<T>* _pre, T _item, bool& _isDeleted) {
@@ -160,8 +170,8 @@ int DeleteNode(Node<T>* _cur, Node<T>* _pre, T _item, bool& _isDeleted) {
 	else {
 		if (_cur->item == _item) {
 			Node<T>* temp = new Node<T>;
-			temp = _cur->next;
-			_pre->next = temp;
+			temp = _cur;
+			_pre->next = temp->next;
 			_cur = nullptr;
 			delete[] _cur;
 			_isDeleted = true;
@@ -219,5 +229,30 @@ int ModifyNode(Node<T>* _data, T _item, bool& _isModified) {
 			ModifyNode(_data->next, _item, _isModified);
 			return _isModified;
 		}
+	}
+}
+
+template <typename T>
+int InsertNode(Node<T>* _pre, Node<T>* _cur, T _item, bool& _isAdded) {
+	if (_pre->next == nullptr) {
+		Node<T>* temp = new Node<T>;
+		temp->item = _item;
+		temp->next = nullptr;
+		_pre->next = temp;
+		_isAdded = true;
+		return _isAdded;
+	}
+	
+	else if (_cur->item > _item) {
+		Node<T>* temp = new Node<T>;
+		temp->item = _item;
+		_pre->next = temp;
+		temp->next = _cur;
+		_isAdded = true;
+		return _isAdded;
+	}
+	else {
+		InsertNode(_pre->next, _cur->next, _item, _isAdded);
+		return _isAdded;
 	}
 }
