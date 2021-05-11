@@ -6,9 +6,9 @@ Application::Application()
     : command(-1), interType(InterfaceType::UNDEFINED)
 {
     msg.first =
-    "\n\t Done";
+    "\n\t Done!";
     msg.second =
-    "\n\t Fail";
+    "\n\t Fail!";
     return;
 }
 
