@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-
+#include <fstream>
 #include "ItemType.h"
 #include "BaseLinkedList.h"
 #include "SinglyLinkedList.h"
@@ -19,6 +19,8 @@ public:
 
     int Run();
 
+private:
+
     int GetCommand(InterfaceType _type);
 
     int Add();
@@ -30,6 +32,10 @@ public:
     int Size();
 
     int Destroy();
+
+    bool LoadTestCase();
+
+    bool GenerateTestCase();
 
 private:
 

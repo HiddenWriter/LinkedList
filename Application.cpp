@@ -1,5 +1,7 @@
 #include "Application.h"
 
+int numOfTestCase (0);
+
 Application::Application() 
     : command(-1), interType(InterfaceType::UNDEFINED)
 {
@@ -12,6 +14,70 @@ Application::Application()
 
 Application::~Application(){ return; }
 
+bool Application::GenerateTestCase()
+{
+    std::ofstream outFile;
+    outFile.open("TestCase.txt", std::ofstream::out | std::ofstream::trunc);
+    if(!outFile)
+    {
+        std::cerr << 
+        "\n\t Failed to Generating test case. \n";
+        outFile.close();
+        return false;
+    }
+    else
+    {
+        for(int i = 0; i < numOfTestCase; i++)
+        {
+            outFile << std::rand() % numOfTestCase << " " << std::rand() % numOfTestCase << "\n";
+        }
+        outFile.close();
+        return true;
+    }
+}
+
+bool Application::LoadTestCase() 
+{
+    std::cout << 
+    "\n\t Type (only positive integer) number of test cases : ";
+    std::cin >> numOfTestCase;
+    std::cout << "\n";
+    GenerateTestCase();
+
+    std::fstream inFile;
+    inFile.open("TestCase.txt");
+    if(!inFile)
+    {
+        std::cout << 
+        "\n\t Incorrect test case file path. \n";
+        inFile.close();
+        return false;
+    }
+    else 
+    {
+        int id(0);
+        std::string name;
+        for(int i = 0; i < numOfTestCase; i++)
+        {
+            inFile >> id;
+            inFile >> name;
+            ItemType tempItem(id, name);
+            switch (interType)
+            {
+                case InterfaceType::STACK:
+                    base->Push(tempItem);
+                    break;
+                case InterfaceType::QUEUE:
+                    base->Add(tempItem);
+                    break;
+                default:
+                break;
+            }
+    }
+        inFile.close();
+        return true;    
+    }
+}
 int Application::Run() 
 {
     int cmd (0);
@@ -56,6 +122,9 @@ int Application::Run()
             case 4:
                 Size();
                 break;
+            case 99:
+                LoadTestCase();
+                break;
             case 0:
                 isTerminated = true;
                 break;
@@ -79,6 +148,7 @@ int Application::GetCommand(InterfaceType _type)
             "\n\t (2)   Pop"
             "\n\t (3)   Print"
             "\n\t (4)   Size"
+            "\n\t (99)  Load Test Case"
             "\n\t (0)   Exit\n";
             break;
         }
@@ -89,6 +159,7 @@ int Application::GetCommand(InterfaceType _type)
             "\n\t (2)   Remove"
             "\n\t (3)   Print"
             "\n\t (4)   Size"
+            "\n\t (99)  Load Test Case"
             "\n\t (0)   Exit\n";
             break;
         }
