@@ -70,6 +70,9 @@ bool Application::LoadTestCase()
                 case InterfaceType::QUEUE:
                     base->Add(tempItem);
                     break;
+                case InterfaceType::LIST:
+                    dynamic_cast<MyListInterface<ItemType>*>(base)->Add(0, tempItem);
+                    break;
                 default:
                 break;
             }
@@ -88,6 +91,9 @@ int Application::Run()
         "\n\t Linked List Test "
         "\n\t (1)   Singly Linked List ( Stack ) "
         "\n\t (2)   Singly Linked List ( Queue )"
+        "\n\t (3)   Doubly Linked List ( Stack )"
+        "\n\t (4)   Doubly Linked List ( Queue )"
+        "\n\t (5)   Doubly Linked List (  List )"
         "\n\t (0)   Terminate Programme \n";
         std::cin >> cmd;
         switch (cmd)
@@ -99,6 +105,18 @@ int Application::Run()
             case 2:
             interType = InterfaceType::QUEUE;
             base = new MyQueue<ItemType>[1];
+            break;
+            case 3:
+            interType = InterfaceType::STACK;
+            base = new MyDoublyStack<ItemType>[1];
+            break;
+            case 4:
+            interType = InterfaceType::QUEUE;
+            base = new MyDoublyQueue<ItemType>[1];
+            break;
+            case 5:
+            interType = InterfaceType::LIST;
+            base = new MyListInterface<ItemType>[1];
             break;
             case 0:
             Destroy();
@@ -121,6 +139,12 @@ int Application::Run()
                 break;
             case 4:
                 Size();
+                break;
+            case 5:
+                Set();
+                break;
+            case 6:
+                Get();
                 break;
             case 99:
                 LoadTestCase();
@@ -163,7 +187,19 @@ int Application::GetCommand(InterfaceType _type)
             "\n\t (0)   Exit\n";
             break;
         }
-        
+        case InterfaceType::LIST:
+        {
+            std::cout <<
+            "\n\t (1)   Add"
+            "\n\t (2)   Remove"
+            "\n\t (3)   Print"
+            "\n\t (4)   Size"
+            "\n\t (5)   Set"
+            "\n\t (6)   Get"
+            "\n\t (99)  Load Test Case"
+            "\n\t (0)   Exit\n";
+            break;
+        }
     default:
         break;
     }
@@ -187,6 +223,15 @@ int Application::Add()
             base->Add(temp);
             break;
         }
+        case InterfaceType::LIST:
+        {
+            int idx(0);
+            std::cout <<
+            "\n\t Add item to index : ";
+            std::cin >> idx;
+            dynamic_cast<MyListInterface<ItemType>*>(base)->Add(idx, temp);
+            break;
+        }
         default:
             break;
     }
@@ -207,6 +252,15 @@ int Application::Remove()
         case InterfaceType::QUEUE:
         {
             temp = base->Remove();
+            break;
+        }
+        case InterfaceType::LIST:
+        {
+            int idx (0);
+            std::cout << 
+            "\n\t Remove item at index : ";
+            std::cin >> idx;
+            temp = dynamic_cast<MyListInterface<ItemType>*>(base)->Remove(idx);
             break;
         }
         default:
@@ -235,5 +289,31 @@ int Application::Size()
 {
     std::cout << 
     "\n\t Current Size : " << base->GetSize();
+    return 1;
+}
+
+int Application::Set()
+{
+    ItemType after, before;
+    after.SetAll();
+    int idx (0);
+    std::cout <<
+    "\n\t index : ";
+    std::cin >> idx;
+    before = dynamic_cast<MyListInterface<ItemType>*>(base)->Set(idx, after);
+    std::cout << " - Item Changed -" << 
+    "\n\t  ID " << before.GetID() << " -> " << after.GetID() << 
+    "\n\t Name "<< before.GetName() << " -> " << after.GetName() << "\n";
+
+    return 1;
+}
+
+int Application::Get()
+{
+    ItemType temp;
+    int idx ( 0 );
+    temp = dynamic_cast<MyListInterface<ItemType>*>(base)->Get(idx);
+    std::cout << " - Got Item -" <<
+    temp;
     return 1;
 }

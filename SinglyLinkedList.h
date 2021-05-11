@@ -6,6 +6,8 @@ template <typename T>
 class SinglyLinkedList
 {
 public:
+
+	
     SinglyLinkedList();
     ~SinglyLinkedList();
 
@@ -22,7 +24,6 @@ public:
 	const int GetSize() const noexcept;
 
 private:
-
 	Node<T>* head;
 	Node<T>* tail;
 	int n;

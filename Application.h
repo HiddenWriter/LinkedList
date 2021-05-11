@@ -4,12 +4,16 @@
 #include "ItemType.h"
 #include "BaseLinkedList.h"
 #include "SinglyLinkedList.h"
+#include "DoublyLinkedList.h"
 #include "MyQueue.h"
 #include "MyStack.h"
+#include "MyDoublyQueue.h"
+#include "MyDoublyStack.h"
+#include "MyListInterface.h"
 
 enum class InterfaceType 
 {
-    STACK, QUEUE, UNDEFINED
+    STACK, QUEUE, LIST, UNDEFINED
 };
 class Application 
 {
@@ -28,6 +32,10 @@ private:
     int Remove();
 
     int Print();
+
+    int Set();
+
+    int Get();
 
     int Size();
 
