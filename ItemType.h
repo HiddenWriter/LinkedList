@@ -1,72 +1,99 @@
 #pragma once
-class ItemType{
+#include <iostream>
+class ItemType
+{
 public:
+	ItemType()
+		: mID(0), mName("STRING")
+	{}
+	ItemType(int _id, std::string _name)
+		: mID(_id), mName(_name)
+	{}
+	~ItemType()
+	{}
+	std::string GetName() const noexcept
+	{
+		return this->mName;
+	}
+	int GetID() const noexcept
+	{
+		return this->mID;
+	}
+	void SetID(int _id)
+	{
+		mID = _id;
+		return;
+	}
+	void SetName(std::string _name)
+	{
+		mName = _name;
+		return;
+	}
+	void SetIDFromKeyboard()
+	{
+		std::cout <<
+			"\t Type ID : ";
+		std::cin >> this->mID;
+	}
+	void SetNameFromKeyboard()
+	{
+		std::cout <<
+			"\t Type Name : ";
+		std::cin >> this->mName;
+	}
+	void PrintDataInfo() const noexcept
+	{
+		std::cout <<
+			"\t ID   : " << this->mID << "\n"
+			"\t NAME : " << this->mName << "\n";
+		return;
+	}
+	void SetAll() 
+	{
+		SetIDFromKeyboard();
+		SetNameFromKeyboard();
+		return;
+	}
+public:
+	bool operator>(const ItemType& _data)
+	{
+		if (this->mID > _data.mID) return true;
+		else return false;
+	}
+	bool operator>=(const ItemType& _data)
+	{
+		if (this->mID >= _data.mID) return true;
+		else return false;
+	}
+	bool operator<(const ItemType& _data)
+	{
+		if (this->mID < _data.mID) return true;
+		else return false;
+	}
+	bool operator<=(const ItemType& _data)
+	{
+		if (this->mID <= _data.mID) return true;
+		else return false;
+	}
+	bool operator==(const ItemType& _data)
+	{
+		if (this->mID == _data.mID) return true;
+		else return false;
+	}
+	bool operator!=(const ItemType& _data)
+	{
+		if (this->mID != _data.mID) return true;
+		else return false;
+	}
 
-    ItemType();
-    ~ItemType();
-        
-    void SetID(int _id);
-    void SetName(std::string _name);
-    void SetIDFromUser();
-    void SetNameFromUser();
-    void SetAllRecord(int _id, std::string _name);
-    void SetAllRecordFromUser();
-    int GetID();
-    std::string GetName();
-
-    // operator overloading
-    bool operator==(ItemType _item) {
-        if(this->GetID() == _item.GetID()) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    void operator=(ItemType _item) {
-        this->SetID(_item.GetID());
-        this->SetName(_item.GetName());
-        return;
-    }
-    bool operator<(ItemType _item) {
-        if(this->GetID() < _item.GetID()) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    bool operator>(ItemType _item) {
-        if(this->GetID() > _item.GetID()) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    bool operator<=(ItemType _item) {
-        if(this->GetID() <= _item.GetID()) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    bool operator>=(ItemType _item) {
-        if(this->GetID() >= _item.GetID()) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    friend std::ostream& operator<<(std::ostream& _os, ItemType _item) {
-        std::cout << "\n\t";
-        std::cout << "ID   : " << _item.GetID() << "\n\t";
-        std::cout << "Name : " << _item.GetName() << '\n';
-        return _os;
-    }
-private:
-    std::string mName;
-    int mID;
+	friend std::ostream& operator<<(std::ostream& _os, const ItemType& _data)
+	{
+		std::cout <<
+			"\t ID    : " << _data.mID << "\n"
+			"\t Name  : " << _data.mName << "\n";
+		return _os;
+	}
+protected:
+	std::string mName;
+	int mID;
 };

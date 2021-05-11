@@ -1,147 +1,168 @@
-#include "pch.h"
 #include "Application.h"
 
-Application::Application() {
-    this->command = -1;
+Application::Application() 
+    : command(-1), interType(InterfaceType::UNDEFINED)
+{
+    msg.first =
+    "\n\t Done";
+    msg.second =
+    "\n\t Fail";
     return;
 }
 
 Application::~Application(){ return; }
 
-int Application::Run() {
-	bool isTerminated = false;
-	while (!isTerminated) {
-		switch (GetCommand()) {
-		case 1:
-			Add();
-			break;
-		case 2:
-			Delete();
-			break;
-		case 3:
-			Search();
-			break;
-		case 4:
-			Modify();
-			break;
-		case 5:
-			Display();
-			break;
-	
-		case 0:
-			isTerminated = true;
-			break;
-		default:
-			break;
-		}
+int Application::Run() 
+{
+    int cmd (0);
+    while(1)
+    {
 
-	}
+        std::cout << 
+        "\n\t Linked List Test "
+        "\n\t (1)   Singly Linked List ( Stack ) "
+        "\n\t (2)   Singly Linked List ( Queue )"
+        "\n\t (0)   Terminate Programme \n";
+        std::cin >> cmd;
+        switch (cmd)
+        {
+            case 1:
+            interType = InterfaceType::STACK;
+            base = new MyStack<ItemType>[1];
+            break;
+            case 2:
+            interType = InterfaceType::QUEUE;
+            base = new MyQueue<ItemType>[1];
+            break;
+            case 0:
+            Destroy();
+            return 1;
+            break;
+        default:
+            break;
+        }
+        bool isTerminated = false;
+        while (!isTerminated) {
+            switch (GetCommand(interType)) {
+            case 1:
+                Add();
+                break;
+            case 2:
+                Remove();
+                break;
+            case 3:
+                Print();
+                break;
+            case 4:
+                Size();
+                break;
+            case 0:
+                isTerminated = true;
+                break;
+            default:
+                break;
+            }
+
+        }
+    }
 	return 1;
 }
 
-int Application::GetCommand() {
-    std::cout << "\t * * * * * * * * * * * * * * * * * * * * * * * * * *\n";
-    std::cout << "\t * Simple Sorted List Programme.                   *\n";
-    std::cout << "\t * 1 : Add data.                                   *\n";
-    std::cout << "\t * 2 : Delete data.                                *\n";
-    std::cout << "\t * 3 : Search data.                                *\n";
-    std::cout << "\t * 4 : Modify Data.                                *\n";
-	std::cout << "\t * 5 : Display all data.                           *\n";
-    std::cout << "\t * 0 : Exit.                                       *\n";
-	std::cout << "\t * * * * * * * * * * * * * * * * * * * * * * * * * *\n";
-	std::cout << "\t: ";
-
-    std::cin >> this->command;
-    switch (this->command)
+int Application::GetCommand(InterfaceType _type) 
+{
+    switch (_type)
     {
-    case 1:
-        this->command = 1;
-        break;
-    case 2:
-        this->command = 2;
-        break;
-    case 3:
-        this->command = 3;
-        break;
-    case 4:
-        this->command = 4;
-        break;
-	case 5:
-		this->command = 5;
-		break;
-	case 6:
-		this->command = 6;
-		break;
-	case 7:
-		this->command = 7;
-		break;
-    case 0:
-        this->command = 0;
-        break;
+        case InterfaceType::STACK:
+        {
+            std::cout <<
+            "\n\t (1)   Push"
+            "\n\t (2)   Pop"
+            "\n\t (3)   Print"
+            "\n\t (4)   Size"
+            "\n\t (0)   Exit\n";
+            break;
+        }
+        case InterfaceType::QUEUE:
+        {
+            std::cout <<
+            "\n\t (1)   Add"
+            "\n\t (2)   Remove"
+            "\n\t (3)   Print"
+            "\n\t (4)   Size"
+            "\n\t (0)   Exit\n";
+            break;
+        }
+        
     default:
         break;
     }
-    return this->command;
+    std::cin >> command;
+    return command;
 }
 
-int Application::Add() {
+int Application::Add() 
+{
     ItemType temp;
-    temp.SetAllRecordFromUser();
-    if(ItemList.Add(temp)) {
-        std::cout << "\n\t Successfully Done. \n";
-        return 1;
+    temp.SetAll();
+    switch (interType)
+    {
+        case InterfaceType::STACK:
+        {
+            base->Push(temp);
+            break;
+        }
+        case InterfaceType::QUEUE:
+        {
+            base->Add(temp);
+            break;
+        }
+        default:
+            break;
     }
-    else {
-        std::cout << "\n\t Error. \n";
-        return 0;
-    }    
-}
-
-int Application::Delete() {
-    ItemType temp;
-    temp.SetIDFromUser();
-    if(ItemList.Delete(temp)) {
-        std::cout << "\n\t Successfully Done. \n";
-        return 1;
-    }
-    else {
-        std::cout << "\n\t Error. \n";
-        return 0;
-    }
-}
-
-int Application::Search() {
-    ItemType temp;
-    temp.SetIDFromUser();
-    if(ItemList.GetItem(temp)) {
-        std::cout << "\n\t -- Item Information -- \n";
-        std::cout << temp;
-        return 1;
-    }
-    else {
-        std::cout << "\n\t Error. \n";
-        return 0;
-    }
-}
-
-int Application::Display() {
-    ItemList.PrintAllItem();
+    std::cout << msg.first;
     return 1;
 }
 
-int Application::Modify() {
-	ItemType tempT;
-	std::cout << "\n\t Enter ID which you want to modify. \n ";
-	tempT.SetIDFromUser();
-	if (!this->ItemList.GetItem(tempT)) {
-		std::cout << "\n\t Couldn't find such item. \n";
-		return 0;
-	}
-	else {
-		std::cout << "\n\t Enter New Information. \n";
-		tempT.SetNameFromUser();
-		ItemList.Modify(tempT);
-		std::cout << "\n\t Successfully Done. \n";
-		return 1;
-	}
+int Application::Remove() 
+{
+    ItemType temp;
+    switch (interType)
+    {
+        case InterfaceType::STACK:
+        {
+            temp = base->Pop();
+            break;
+        }
+        case InterfaceType::QUEUE:
+        {
+            temp = base->Remove();
+            break;
+        }
+        default:
+            break;
+    }
+    std::cout << 
+    "\n\t - Removed Item - \n" <<
+    temp;
+    return 1;
+}
+
+
+int Application::Print() 
+{
+    base->Print();
+    return 1;
+}
+
+int Application::Destroy()
+{
+    delete[] base;
+    return 1;
+}
+
+int Application::Size()
+{
+    std::cout << 
+    "\n\t Current Size : " << base->GetSize();
+    return 1;
 }
