@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include "ItemType.h"
+#include "Array.h"
+#include "ArrayDeque.h"
 #include "BaseLinkedList.h"
 #include "SinglyLinkedList.h"
 #include "DoublyLinkedList.h"
@@ -10,6 +12,8 @@
 #include "MyDoublyQueue.h"
 #include "MyDoublyStack.h"
 #include "MyListInterface.h"
+#include "SpaceEfficientList.h"
+#include "MySEList.h"
 
 enum class InterfaceType 
 {

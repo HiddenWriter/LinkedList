@@ -94,6 +94,7 @@ int Application::Run()
         "\n\t (3)   Doubly Linked List ( Stack )"
         "\n\t (4)   Doubly Linked List ( Queue )"
         "\n\t (5)   Doubly Linked List (  List )"
+        "\n\t (6)   Space-Efficient List ( Stack )"
         "\n\t (0)   Terminate Programme \n";
         std::cin >> cmd;
         switch (cmd)
@@ -117,6 +118,10 @@ int Application::Run()
             case 5:
             interType = InterfaceType::LIST;
             base = new MyListInterface<ItemType>[1];
+            break;
+            case 6:
+            interType = InterfaceType::STACK;
+            base = new MySEList<ItemType>[1];
             break;
             case 0:
             Destroy();
@@ -241,6 +246,7 @@ int Application::Add()
 
 int Application::Remove() 
 {
+    if (base->GetSize() == 0) return 0;
     ItemType temp;
     switch (interType)
     {
